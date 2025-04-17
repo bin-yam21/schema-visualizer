@@ -1,0 +1,1318 @@
+export const schema = {
+  models: [
+    {
+      name: "Absent",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "hour", type: "number", attributes: [] },
+        { name: "date", type: "Date", attributes: [] },
+        { name: "isTaken", type: "boolean", attributes: [] },
+        { name: "employeeProjectId", type: "string", attributes: [] },
+        {
+          name: "status",
+          type: "'absent', 'onleave'",
+          attributes: ["@default(Absent)"],
+        },
+        { name: "createdBy", type: "number", attributes: ["@unique"] },
+        {
+          name: "createdAt",
+          type: "DateTime",
+          attributes: ["@default(now())"],
+        },
+        {
+          name: "updatedAt",
+          type: "DateTime",
+          attributes: ["@updatedAt"],
+        },
+      ],
+      relations: [
+        {
+          name: "overtimes",
+          type: "overtime",
+          attribute: "@relation(fields: [userId], references: [id])",
+        },
+      ],
+    },
+    {
+      name: "ActivityLog",
+      fields: [
+        {
+          name: "id",
+          type: "number",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "action", type: "String", attributes: [] },
+        { name: "module", type: "String", attributes: [] },
+        { name: "description?", type: "String", attributes: [] },
+        { name: "userId", type: "number", attributes: [] },
+        { name: "createdBy", type: "number", attributes: ["@unique"] },
+        {
+          name: "createdAt",
+          type: "DateTime",
+          attributes: ["@default(now())"],
+        },
+      ],
+      relations: [],
+    },
+    {
+      name: "AdditionalPayment",
+      fields: [
+        {
+          name: "id",
+          type: "number",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "name", type: "String", attributes: [] },
+        { name: "type", type: "'EARNING' | 'DEDUCTION'", attributes: [] },
+        {
+          name: "taxType",
+          type: "'TAXABLE | 'NONTAXABLE' | 'SEMI'",
+          attributes: [],
+        },
+        { name: "overFixedAmount?", type: "number", attributes: [] },
+        { name: "overSalaryPercent?", type: "number", attributes: [] },
+        { name: " isPensionAllowed", type: "boolean", attributes: [] },
+        { name: " effectiveDate", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "additionals",
+          type: "Additional[]",
+          attribute: "@relation(fields: [id], references: [additionalId])",
+        },
+      ],
+    },
+    {
+      name: "Additional",
+      fields: [
+        {
+          name: "id",
+          type: "number",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        {
+          name: "amountType",
+          type: "'FIXED' | 'SALARY_PERCENT'",
+          attributes: [],
+        },
+        { name: "amount", type: "number", attributes: [] },
+        { name: "isPermanent", type: "boolean", attributes: [] },
+        { name: "fromDate?", type: "Date", attributes: [] },
+        { name: "  toDate?", type: "Date", attributes: [] },
+        { name: " employeeProjectId", type: "string", attributes: [] },
+        { name: " additionalPaymentId", type: "string", attributes: [] },
+      ],
+      relations: [],
+    },
+    {
+      name: "Announcement",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "title", type: "String", attributes: [] },
+        { name: "description", type: "String", attributes: [] },
+        { name: "date", type: "Date", attributes: [] },
+        { name: "location", type: "String", attributes: [] },
+        {
+          name: "status",
+          type: "'active', 'inactive', 'archived'",
+          attributes: ["@default(Active)"],
+        },
+        { name: "createdBy", type: "number", attributes: ["@unique"] },
+        {
+          name: "createdAt",
+          type: "DateTime",
+          attributes: ["@default(now())"],
+        },
+        {
+          name: "updatedAt",
+          type: "DateTime",
+          attributes: ["@updatedAt"],
+        },
+      ],
+      relations: [
+        {
+          name: "users",
+          type: "user",
+          attribute: "@relation(fields: [userId], references: [id])",
+        },
+      ],
+    },
+    {
+      name: "AnnualLeaveBalance",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "fromDate", type: "Date", attributes: [] },
+        { name: "toDate", type: "Date", attributes: [] },
+        { name: "balance", type: "number", attributes: [] },
+        { name: "used", type: "number", attributes: [] },
+        {
+          name: "status",
+          type: "'active', 'inactive', 'Expired'",
+          attributes: ["@default(Active)"],
+        },
+        { name: "employeeProjectId", type: "string", attributes: ["@unique"] },
+        {
+          name: "createdAt",
+          type: "DateTime",
+          attributes: ["@default(now())"],
+        },
+        {
+          name: "updatedAt",
+          type: "DateTime",
+          attributes: ["@updatedAt"],
+        },
+      ],
+      relations: [],
+    },
+    {
+      name: "ApprovalHistory",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "itemId?", type: "string", attributes: [] },
+        { name: "approvedBy", type: "String", attributes: [] },
+        { name: "approvedAt", type: "Date", attributes: ["@default(now())"] },
+
+        {
+          name: "status",
+          type: "'Failed', 'Approved', 'Pending'",
+          attributes: [],
+        },
+        { name: "comments?", type: "string", attributes: [] },
+        { name: "transactionId", type: "string", attributes: [] },
+        {
+          name: "createdAt",
+          type: "DateTime",
+          attributes: ["@default(now())"],
+        },
+        {
+          name: "updatedAt",
+          type: "DateTime",
+          attributes: ["@updatedAt"],
+        },
+      ],
+      relations: [],
+    },
+    {
+      name: "AssetCategory",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "IDNO", type: "string", attributes: [] },
+        { name: "name", type: "String", attributes: [] },
+        {
+          name: "description?",
+          type: "string",
+          attributes: ["@default(now())"],
+        },
+        {
+          name: "createdAt",
+          type: "DateTime",
+          attributes: ["@default(now())"],
+        },
+        {
+          name: "updatedAt",
+          type: "DateTime",
+          attributes: ["@updatedAt"],
+        },
+      ],
+      relations: [
+        {
+          name: "assetItems",
+          type: "AssetItem[]",
+          attribute: "@relation(fields: [id], references: [categoryId])",
+        },
+      ],
+    },
+    {
+      name: "AssetItemBatch",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "IDNO", type: "string", attributes: [] },
+        { name: "quantity", type: "number", attributes: [] },
+        { name: "costPerUnit", type: "number", attributes: [] },
+        { name: "totalCost", type: "number", attributes: [] },
+        { name: "expirationDate", type: "Date", attributes: [] },
+        { name: "storageLocation?", type: "string", attributes: [] },
+        { name: "supplier?", type: "string", attributes: [] },
+        { name: "assetItemId", type: "string", attributes: [] },
+        {
+          name: "status",
+          type: "'InStock' | 'LowStock' | 'OutOfStock' | 'OverStocked' | 'Reserved' | 'Expired' | 'BackOrdered' | 'DueExpiry' | 'InTransit'",
+          attributes: [],
+        },
+        {
+          name: "stockLevel",
+          type: "number",
+          attributes: ["@default(now())"],
+        },
+        {
+          name: "createdAt",
+          type: "DateTime",
+          attributes: ["@default(now())"],
+        },
+        {
+          name: "updatedAt",
+          type: "DateTime",
+          attributes: ["@updatedAt"],
+        },
+      ],
+      relations: [],
+    },
+    {
+      name: "AssetItem",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "IDNO", type: "string", attributes: [] },
+        { name: "name", type: "string", attributes: [] },
+        { name: "reorderQuantity?", type: "number", attributes: [] },
+        { name: "minLevel", type: "number", attributes: [] },
+        { name: "maxLevel?", type: "number", attributes: [] },
+        { name: "description?", type: "string", attributes: [] },
+        { name: "categoryId", type: "string", attributes: [] },
+        { name: "typeId", type: "string", attributes: [] },
+        { name: "unitId", type: "string", attributes: [] },
+        {
+          name: "createdAt",
+          type: "DateTime",
+          attributes: ["@default(now())"],
+        },
+        {
+          name: "updatedAt",
+          type: "DateTime",
+          attributes: ["@updatedAt"],
+        },
+      ],
+      relations: [
+        {
+          name: "itemsBatch",
+          type: "AssetItemBatch[]",
+          attribute: "@relation(fields: [id], references: [assetItemId])",
+        },
+      ],
+    },
+    {
+      name: "AssetTransactionItem",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "quantity", type: "number", attributes: [] },
+        { name: "approvedBy?", type: "string", attributes: [] },
+        { name: "approvedAt?", type: "Date", attributes: [] },
+        { name: "comments?", type: "string", attributes: [] },
+        {
+          name: "type",
+          type: "'Transfer' | 'Used' | 'Return'",
+          attributes: [],
+        },
+        {
+          name: "status",
+          type: "'Failed' | 'Approved' | 'Pending'",
+          attributes: [],
+        },
+        { name: "employeeId", type: "string", attributes: [] },
+        { name: "batchItemId", type: "string", attributes: [] },
+        { name: "transactionId", type: "string", attributes: [] },
+        {
+          name: "createdAt",
+          type: "DateTime",
+          attributes: ["@default(now())"],
+        },
+        {
+          name: "updatedAt",
+          type: "DateTime",
+          attributes: ["@updatedAt"],
+        },
+      ],
+      relations: [],
+    },
+    {
+      name: "AssetTransaction",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "RefNo", type: "string", attributes: [] },
+        { name: "approvedBy?", type: "string", attributes: [] },
+        { name: "approvedAt?", type: "Date", attributes: [] },
+        { name: "comments?", type: "string", attributes: [] },
+        {
+          name: "status",
+          type: "'Failed' | 'Approved' | 'Pending'",
+          attributes: [],
+        },
+        {
+          name: "createdAt",
+          type: "DateTime",
+          attributes: ["@default(now())"],
+        },
+        {
+          name: "updatedAt",
+          type: "DateTime",
+          attributes: ["@updatedAt"],
+        },
+      ],
+      relations: [
+        {
+          name: "items",
+          type: "AssetTransactionItem[]",
+          attribute: "@relation(fields: [id], references: [transactionId])",
+        },
+        {
+          name: "approvalHistory",
+          type: "ApprovalHistory[]",
+          attribute: "@relation(fields: [id], references: [transactionId])",
+        },
+      ],
+    },
+    {
+      name: "AssetType",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "name", type: "string", attributes: [] },
+        { name: "description?", type: "string", attributes: [] },
+        {
+          name: "createdAt",
+          type: "DateTime",
+          attributes: ["@default(now())"],
+        },
+        {
+          name: "updatedAt",
+          type: "DateTime",
+          attributes: ["@updatedAt"],
+        },
+      ],
+      relations: [
+        {
+          name: "items",
+          type: "AssetItem[]",
+          attribute: "@relation(fields: [id], references: [typeId])",
+        },
+      ],
+    },
+    {
+      name: "AssetUnit",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "name", type: "string", attributes: [] },
+        { name: "description?", type: "string", attributes: [] },
+        {
+          name: "createdAt",
+          type: "DateTime",
+          attributes: ["@default(now())"],
+        },
+        {
+          name: "updatedAt",
+          type: "DateTime",
+          attributes: ["@updatedAt"],
+        },
+      ],
+      relations: [
+        {
+          name: "items",
+          type: "AssetItem[]",
+          attribute: "@relation(fields: [id], references: [unitId])",
+        },
+      ],
+    },
+    {
+      name: "Branch",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "IDNO", type: "String", attributes: ["@unique"] },
+        { name: "name", type: "String", attributes: [] },
+        { name: "city", type: "String", attributes: [] },
+        { name: "subCity", type: "String", attributes: [] },
+        { name: "wereda", type: "String?", attributes: [] },
+        {
+          name: "status",
+          type: "BranchStatus",
+          attributes: ["@default(Active)"],
+        },
+        {
+          name: "createdAt",
+          type: "DateTime",
+          attributes: ["@default(now())"],
+        },
+        {
+          name: "updatedAt",
+          type: "DateTime",
+          attributes: ["@updatedAt"],
+        },
+      ],
+      relations: [{ name: "departments", type: "Department[]", attribute: "" }],
+      uniqueConstraints: [],
+    },
+    {
+      name: "Company",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "name", type: "String", attributes: [] },
+        { name: "city", type: "String", attributes: [] },
+        { name: "subCity", type: "String", attributes: [] },
+        { name: "wereda?", type: "String", attributes: [] },
+        { name: "kebele?", type: "String", attributes: [] },
+        { name: "houseNo?", type: "String", attributes: [] },
+        { name: "VAT?", type: "String", attributes: [] },
+        { name: "TIN?", type: "String", attributes: [] },
+        { name: "license?", type: "String", attributes: [] },
+        { name: "profile?", type: "String", attributes: [] },
+        { name: "agreement?", type: "String", attributes: [] },
+        { name: "phone?", type: "String", attributes: [] },
+        { name: "email?", type: "String", attributes: [] },
+        {
+          name: "status",
+          type: "'Pending' | 'Active' | 'Inactive' | 'Terminated'",
+          attributes: ["@default(Active)"],
+        },
+        {
+          name: "createdAt",
+          type: "DateTime",
+          attributes: ["@default(now())"],
+        },
+        {
+          name: "updatedAt",
+          type: "DateTime",
+          attributes: ["@updatedAt"],
+        },
+      ],
+      relations: [{ name: "projects", type: "Project[]", attribute: "" }],
+      uniqueConstraints: [],
+    },
+    {
+      name: "Daily-report",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "date", type: "Date", attributes: [] },
+        { name: "report", type: "String", attributes: [] },
+        { name: "description?", type: "String", attributes: [] },
+        {
+          name: "riskLevel",
+          type: "Ok | low | medium | high ",
+          attributes: ["@default(ok)"],
+        },
+        { name: "attachments?", type: "String", attributes: [] },
+        { name: "reportedById", type: "String", attributes: [] },
+        { name: "projectId", type: "String", attributes: [] },
+
+        {
+          name: "createdAt",
+          type: "DateTime",
+          attributes: ["@default(now())"],
+        },
+        {
+          name: "updatedAt",
+          type: "DateTime",
+          attributes: ["@updatedAt"],
+        },
+      ],
+      relations: [],
+      uniqueConstraints: [],
+    },
+    {
+      name: "Deduction",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "employeeProjectId", type: "String", attributes: [] },
+        { name: "incomeTax", type: "boolean", attributes: [] },
+        { name: "pension", type: "boolean", attributes: [] },
+        { name: "remark?", type: "String", attributes: [] },
+      ],
+      relations: [],
+      uniqueConstraints: [],
+    },
+    {
+      name: "Department",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "IDNO", type: "String", attributes: [] },
+        { name: "name", type: "String", attributes: [] },
+        { name: "branchId", type: "String", attributes: [] },
+        { name: "status", type: "'Active' | 'Inactive'", attributes: [] },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "positions",
+          type: "Position[]",
+          attribute: "@relation(fields: [id], references: [departmentId])",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
+      name: "EmployeeAgreement",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "file?", type: "String", attributes: [] },
+        { name: "name", type: "String", attributes: [] },
+        { name: "remark?", type: "String", attributes: [] },
+        { name: "employeeId", type: "string", attributes: [] },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [],
+      uniqueConstraints: [],
+    },
+    {
+      name: "EmployeeEducationalBackground",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "startDate", type: "Date", attributes: [] },
+        { name: "endDate?", type: "Date", attributes: [] },
+        { name: "institution", type: "String", attributes: [] },
+        { name: "qualification", type: "string", attributes: [] },
+        { name: "file?", type: "string", attributes: [] },
+        { name: "employeeId", type: "string", attributes: [] },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [],
+      uniqueConstraints: [],
+    },
+    {
+      name: "EmployeeProfile",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "idType", type: "string", attributes: [] },
+        { name: "idFront", type: "string", attributes: [] },
+        { name: "idBack", type: "String", attributes: [] },
+        { name: "profilePic?", type: "string", attributes: [] },
+        { name: "city", type: "string", attributes: [] },
+        { name: "subcity?", type: "string", attributes: [] },
+        { name: "wereda?", type: "string", attributes: [] },
+        { name: "houseNo?", type: "string", attributes: [] },
+        { name: "phone", type: "string", attributes: [] },
+        { name: "email", type: "string", attributes: [] },
+        { name: "motherName?", type: "string", attributes: [] },
+        { name: "emergencyContactName", type: "string", attributes: [] },
+        { name: "emergencyPhone", type: "string", attributes: [] },
+        { name: "emergencyRelation", type: "string", attributes: [] },
+        { name: "religion?", type: "string", attributes: [] },
+        { name: "fingerprintFile?", type: "string", attributes: [] },
+        { name: "medicalFile?", type: "string", attributes: [] },
+        { name: "tin?", type: "string", attributes: [] },
+        { name: "bankName", type: "string", attributes: [] },
+        { name: "bankAccount", type: "string", attributes: [] },
+        { name: "profileId", type: "string", attributes: [] },
+        {
+          name: "maritalStatus",
+          type: "'Single' | 'Married' | 'Divorced' | 'Widowed'",
+          attributes: [],
+        },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "employee",
+          type: "Employee",
+          attribute: "@relation(fields: [id], references: [profileId])",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
+      name: "EmployeeProject",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "salary", type: "string", attributes: [] },
+        { name: "role", type: "string", attributes: [] },
+        {
+          name: "status",
+          type: "'Active' | 'Inactive' | 'Suspended' | 'Terminated'",
+          attributes: [],
+        },
+        { name: "employeeId", type: "string", attributes: [] },
+        { name: "projectId", type: "string", attributes: [] },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "additionals",
+          type: "Additional[]",
+          attribute: " ",
+        },
+        {
+          name: "overtimes",
+          type: "Overtime[]",
+          attribute: " ",
+        },
+        {
+          name: "absents",
+          type: "Absent[]",
+          attribute: " ",
+        },
+        {
+          name: "leaveApplications",
+          type: "LeaveApplication[]",
+          attribute: " ",
+        },
+        {
+          name: "annualLeaveBalances",
+          type: "AnnualLeaveBalance[]",
+          attribute: " ",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
+      name: "EmployeeSurety",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "type", type: "string", attributes: [] },
+        { name: "file", type: "string", attributes: [] },
+        {
+          name: "fullName",
+          type: "string",
+          attributes: [],
+        },
+        { name: "city", type: "string", attributes: [] },
+        { name: "subcity?", type: "string", attributes: [] },
+        { name: " wereda?", type: "string", attributes: [] },
+        { name: " houseNo?", type: "string", attributes: [] },
+        { name: " employeeId", type: "string", attributes: [] },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [],
+      uniqueConstraints: [],
+    },
+    {
+      name: "EmployeeWorkBackground",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "startDate", type: "Date", attributes: [] },
+        { name: "endDate?", type: "Date", attributes: [] },
+        {
+          name: "institution",
+          type: "string",
+          attributes: [],
+        },
+        { name: "qualification", type: "string", attributes: [] },
+        { name: "file?", type: "string", attributes: [] },
+        { name: " employeeId", type: "string", attributes: [] },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [],
+      uniqueConstraints: [],
+    },
+    {
+      name: "Employee",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "idNo", type: "Date", attributes: [] },
+        { name: "rank?", type: "string", attributes: [] },
+        {
+          name: "docNo?",
+          type: "string",
+          attributes: [],
+        },
+        { name: "fullNameEnglish", type: "string", attributes: [] },
+        { name: "fullNameAmharic?", type: "string", attributes: [] },
+        { name: " dateOfBirth", type: "Date", attributes: [] },
+        {
+          name: " gender",
+          type: "'Male' | 'Female' | 'Other'",
+          attributes: [],
+        },
+        { name: " nationality", type: "string", attributes: [] },
+        { name: " startDate", type: "Date", attributes: [] },
+        {
+          name: " status",
+          type: "'Active' | 'Inactive' | 'Terminated'",
+          attributes: [],
+        },
+        { name: " positionId", type: "string", attributes: [] },
+        { name: " profileId", type: "string", attributes: [] },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "workBackgrounds",
+          type: "EmployeeWorkBackground[]",
+          attribute: "",
+        },
+        {
+          name: "educationalBackgrounds",
+          type: "EmployeeEducationalBackground[]",
+          attribute: "",
+        },
+        {
+          name: "agreements",
+          type: "EmployeeAgreement[]",
+          attribute: "",
+        },
+        {
+          name: "sureties",
+          type: "EmployeeSurety[]",
+          attribute: "",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
+      name: "LeaveApplication",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "idNo", type: "Date", attributes: [] },
+        { name: "rank?", type: "string", attributes: [] },
+        {
+          name: "docNo?",
+          type: "string",
+          attributes: [],
+        },
+        { name: "rejectionReason?", type: "string", attributes: [] },
+        {
+          name: "status",
+          type: "'Pending' | 'Approved' | 'Rejected' | 'Cancelled'",
+          attributes: ["@status", "@default(Pending)"],
+        },
+        { name: " attachment?", type: "string", attributes: [] },
+        { name: " remark?", type: "string", attributes: [] },
+        { name: " days", type: "number", attributes: [] },
+        { name: " fromDate", type: "Date", attributes: [] },
+        { name: " approvedAt?", type: "Date", attributes: [] },
+        { name: " rejectedAt?", type: "Date", attributes: [] },
+        { name: " approvedBy?", type: "Date", attributes: [] },
+        { name: " rejectedBy?", type: "Date", attributes: [] },
+        { name: " toDate", type: "Date", attributes: [] },
+        { name: " leaveTypeId", type: "string", attributes: [] },
+        { name: " employeeProjectId", type: "string", attributes: [] },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "workBackgrounds",
+          type: "EmployeeWorkBackground[]",
+          attribute: "",
+        },
+        {
+          name: "educationalBackgrounds",
+          type: "EmployeeEducationalBackground[]",
+          attribute: "",
+        },
+        {
+          name: "agreements",
+          type: "EmployeeAgreement[]",
+          attribute: "",
+        },
+        {
+          name: "sureties",
+          type: "EmployeeSurety[]",
+          attribute: "",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
+      name: "LeaveType",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "name", type: "string", attributes: [] },
+        { name: "rank?", type: "string", attributes: [] },
+        {
+          name: "description?",
+          type: "string",
+          attributes: [],
+        },
+        { name: "isLimited", type: "boolean", attributes: [] },
+        { name: "maxDays?", type: "number", attributes: [] },
+        {
+          name: " effectiveFromDays",
+          type: "number",
+          attributes: ["default(0)"],
+        },
+        { name: " status", type: "'Active' | 'inActive'", attributes: [] },
+        { name: " repetition", type: "boolean", attributes: [] },
+        { name: " withPay", type: "boolean", attributes: [] },
+        { name: " ot32Payable", type: "boolean", attributes: [] },
+        {
+          name: " deductibleFromAnnualBalance",
+          type: "boolean",
+          attributes: [],
+        },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "leaveApplications",
+          type: "LeaveApplication[]",
+          attribute: "",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
+      name: "Menu",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "name", type: "string", attributes: [] },
+        { name: "description", type: "string", attributes: [] },
+        {
+          name: "permissions?",
+          type: "string[]",
+          attributes: [],
+        },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "userPermissions",
+          type: "UserPermission[]",
+          attribute: "",
+        },
+        {
+          name: "roleMenus",
+          type: "RoleMenu[]",
+          attribute: "",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
+      name: "Notification",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "user_id", type: "number", attributes: [] },
+        { name: "title", type: "string", attributes: [] },
+        { name: "content", type: "string", attributes: [] },
+        { name: "date", type: "string", attributes: ["Default(now)"] },
+        {
+          name: "notification_from?",
+          type: "string",
+          attributes: [],
+        },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "userPermissions",
+          type: "UserPermission[]",
+          attribute: "",
+        },
+        {
+          name: "roleMenus",
+          type: "RoleMenu[]",
+          attribute: "",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
+      name: "Organization",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "name", type: "string", attributes: [] },
+        { name: "phone", type: "string", attributes: [] },
+        { name: "email?", type: "string", attributes: [] },
+        { name: "tin?", type: "string", attributes: [""] },
+        { name: "logo?", type: "string", attributes: [""] },
+        { name: "license?", type: "string", attributes: [""] },
+        {
+          name: "vat?",
+          type: "string",
+          attributes: [],
+        },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "userPermissions",
+          type: "UserPermission[]",
+          attribute: "",
+        },
+        {
+          name: "roleMenus",
+          type: "RoleMenu[]",
+          attribute: "",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
+      name: "Overtime",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "hour", type: "number", attributes: [] },
+        { name: "isForAbsent", type: "string", attributes: [] },
+        { name: "date", type: "Date", attributes: [] },
+        { name: "employeeProjectId", type: "string", attributes: [""] },
+        { name: "absentId?", type: "string", attributes: [""] },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [],
+      uniqueConstraints: [],
+    },
+    {
+      name: "Position",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "IDNO", type: "string", attributes: [] },
+        { name: "name", type: "string", attributes: [] },
+        { name: "status", type: "'Active' | 'Inactive'", attributes: [] },
+
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "employees",
+          type: "Employee[]",
+          attributes: "",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
+      name: "Project",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "name", type: "string", attributes: [] },
+        { name: "city", type: "string", attributes: [] },
+        { name: "subCity", type: "string", attributes: [] },
+        { name: "noSecurity", type: "number", attributes: [] },
+        { name: "startDate", type: "Date", attributes: [] },
+        { name: "endDate?", type: "Date", attributes: [] },
+        { name: "attachments?", type: "string", attributes: [] },
+        { name: "OTprice", type: "number", attributes: [] },
+        { name: "companyId", type: "string", attributes: [] },
+        { name: "incomeTaxCenterId", type: "string", attributes: [] },
+        { name: "pensionTaxCenterId", type: "string", attributes: [] },
+        {
+          name: "status",
+          type: "'Pending' | 'Active' | 'Completed' | 'Cancelled' | 'OnHold'",
+          attributes: ["default(Pending)"],
+        },
+
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "employees",
+          type: "Employee[]",
+          attributes: "",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
+      name: "RoleMenu",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "roleId", type: "string", attributes: [] },
+        { name: "menuId", type: "string", attributes: [] },
+      ],
+      relations: [],
+      uniqueConstraints: [],
+    },
+    {
+      name: "Role",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "name", type: "string", attributes: [] },
+        { name: "createdAt?", type: "Date", attributes: [] },
+        { name: "updatedAt?", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "userRoles",
+          type: "UserRole[]",
+          attribute: "",
+        },
+        {
+          name: "roleMenus",
+          type: "RoleMenu[]",
+          attribute: "",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
+      name: "TaxCenter",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "name", type: "string", attributes: [] },
+        { name: "city?", type: "string", attributes: [] },
+        { name: "subcity?", type: "string", attributes: [] },
+        { name: "wereda?", type: "string", attributes: [] },
+        { name: "attachments?", type: "string", attributes: [] },
+        { name: "phone?", type: "string", attributes: [] },
+        { name: "account", type: "string", attributes: [] },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "incomeProjects",
+          type: "Project[]",
+          attribute: "",
+        },
+        {
+          name: "pensionProjects",
+          type: "Project[]",
+          attribute: "",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
+      name: "UserPermission",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "menuId", type: "string", attributes: [] },
+        { name: "permissions", type: "string[]", attributes: [] },
+        { name: "createdAt?", type: "Date", attributes: [] },
+        { name: "updatedAt?", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "incomeProjects",
+          type: "Project[]",
+          attribute: "",
+        },
+        {
+          name: "pensionProjects",
+          type: "Project[]",
+          attribute: "",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
+      name: "UserRole",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "userId", type: "string", attributes: [] },
+        { name: "roleId", type: "string", attributes: [] },
+        { name: "createdAt?", type: "Date", attributes: [] },
+        { name: "updatedAt?", type: "Date", attributes: [] },
+      ],
+      relations: [],
+      uniqueConstraints: [],
+    },
+    {
+      name: "User",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "username", type: "string", attributes: [] },
+        { name: "email", type: "string", attributes: [] },
+        { name: "password", type: "string", attributes: [] },
+        { name: "createdAt?", type: "Date", attributes: [] },
+        { name: "updatedAt?", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "userRoles",
+          type: "UserRole[]",
+          attribute: "",
+        },
+        {
+          name: "userPermissions",
+          type: "UserPermission[]",
+          attribute: "",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
+      name: "WorkHour",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "employeeProjectId", type: "string", attributes: [] },
+        {
+          name: "status",
+          type: "'PENDING'|'APPROVED'|'REJECTED'",
+          attributes: [],
+        },
+        { name: "regularHour", type: "number", attributes: [] },
+        { name: "hour32", type: "number", attributes: [] },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "userRoles",
+          type: "UserRole[]",
+          attribute: "",
+        },
+        {
+          name: "userPermissions",
+          type: "UserPermission[]",
+          attribute: "",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    // Include other models from the schema...
+  ],
+  enums: [
+    {
+      name: "TimeSheetStatus",
+      values: ["Pending", "Approved", "Failed"],
+    },
+    {
+      name: "PayrollStatus",
+      values: ["Pending", "Approved", "Failed"],
+    },
+    // Include other enums from the schema...
+  ],
+};
