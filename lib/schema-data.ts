@@ -843,6 +843,50 @@ export const schema = {
       uniqueConstraints: [],
     },
     {
+      name: "Interview",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "title", type: "string", attributes: [] },
+        { name: "branchId", type: "string", attributes: [] },
+        {
+          name: "departmentId",
+          type: "string",
+          attributes: [],
+        },
+        { name: "positionId", type: "string", attributes: [] },
+        { name: "questions", type: "string[]", attributes: [] },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "workBackgrounds",
+          type: "EmployeeWorkBackground[]",
+          attribute: "",
+        },
+        {
+          name: "educationalBackgrounds",
+          type: "EmployeeEducationalBackground[]",
+          attribute: "",
+        },
+        {
+          name: "agreements",
+          type: "EmployeeAgreement[]",
+          attribute: "",
+        },
+        {
+          name: "sureties",
+          type: "EmployeeSurety[]",
+          attribute: "",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
       name: "LeaveApplication",
       fields: [
         {
@@ -1300,6 +1344,105 @@ export const schema = {
           attribute: "",
         },
       ],
+      uniqueConstraints: [],
+    },
+    {
+      name: "Vacancy",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "title", type: "string", attributes: [] },
+        { name: "branchId", type: "string", attributes: [] },
+        { name: "departmentId", type: "string", attributes: [] },
+        { name: "positionId", type: "string", attributes: [] },
+        {
+          name: "vacancyType",
+          type: "'INTERNAL'|'EXTERNAL'",
+          attributes: [],
+        },
+        {
+          name: "employmentType",
+          type: "'FULLTIME' | 'PARTTIME' | 'CONTRACT'",
+          attributes: [],
+        },
+        {
+          name: "status",
+          type: "'ACTIVE' | 'DRAFT' | 'INACTIVE'",
+          attributes: [],
+        },
+        { name: "opening", type: "Date", attributes: [] },
+        { name: "deadline", type: "Date", attributes: [] },
+        { name: "secter", type: "string?", attributes: [] },
+        { name: "numberOfVacancies", type: "number", attributes: [] },
+        { name: "salary", type: "number", attributes: [] },
+        { name: "description", type: "string?", attributes: [] },
+        {
+          name: "experiance",
+          type: "'Fresh' | '1-2 Years' |'2-5 Years' | '5+ Years'",
+          attributes: [],
+        },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "vacancyApplicants",
+          type: "VacancyApplicant[]",
+          attribute: "",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
+      name: "VacancyApplicant",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        {
+          name: "vacancyId",
+          type: "string",
+          attributes: [],
+        },
+        { name: "fullNameEnglish", type: "string", attributes: [] },
+        { name: "fullNameAmharic", type: "string", attributes: [] },
+        { name: "sex", type: "'MALE'|'FEMALE'", attributes: [] },
+        { name: "nationality", type: "'Ethiopian'|'OTHER'", attributes: [] },
+        {
+          name: "DateOfBirth",
+          type: "Date",
+          attributes: [],
+        },
+        {
+          name: "ApplicationDate",
+          type: "Date",
+          attributes: [],
+        },
+        {
+          name: "status",
+          type: "'PENDING' | 'INTERVIEWED' | 'HIRED' | 'REJECTED'",
+          attributes: [],
+        },
+        { name: "opening", type: "Date", attributes: [] },
+        { name: "deadline", type: "Date", attributes: [] },
+        { name: "secter", type: "string?", attributes: [] },
+        { name: "numberOfVacancies", type: "number", attributes: [] },
+        { name: "salary", type: "number", attributes: [] },
+        { name: "description", type: "string?", attributes: [] },
+        {
+          name: "experiance",
+          type: "'Fresh' | '1-2 Years' |'2-5 Years' | '5+ Years'",
+          attributes: [],
+        },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [],
       uniqueConstraints: [],
     },
     // Include other models from the schema...
