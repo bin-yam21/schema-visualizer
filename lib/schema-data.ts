@@ -843,6 +843,37 @@ export const schema = {
       uniqueConstraints: [],
     },
     {
+      name: "Evaluation",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "title", type: "string", attributes: [] },
+        { name: "vacancyApplicantId", type: "string", attributes: [] },
+        { name: "interviewId", type: "string", attributes: [] },
+        { name: "score", type: "number", attributes: [] },
+        { name: "status", type: "'Passed' | 'Failed'", attributes: [] },
+        { name: "description?", type: "string", attributes: [] },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "vacancyApplicant",
+          type: "VacancyApplicant",
+          attribute: "",
+        },
+        {
+          name: "interview",
+          type: "Interview",
+          attribute: "",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
       name: "Interview",
       fields: [
         {
@@ -851,36 +882,27 @@ export const schema = {
           attributes: ["@id", "@default(uuid())"],
         },
         { name: "title", type: "string", attributes: [] },
-        { name: "branchId", type: "string", attributes: [] },
+        { name: "interviewerName", type: "string", attributes: [] },
+        { name: "vacancyId", type: "string", attributes: [] },
+        { name: "questionId", type: "string[]", attributes: [] },
+        { name: "date", type: "Date", attributes: [] },
         {
-          name: "departmentId",
-          type: "string",
+          name: "interviewStatus",
+          type: " 'SCHEDULED' | 'COMPLETED' | 'CANCELLED'",
           attributes: [],
         },
-        { name: "positionId", type: "string", attributes: [] },
-        { name: "questions", type: "string[]", attributes: [] },
+        {
+          name: "interviewType",
+          type: " 'Technical' | 'HR' | 'Final'",
+        },
+        { name: "location", type: "string", attributes: [] },
         { name: "createdAt", type: "Date", attributes: [] },
         { name: "updatedAt", type: "Date", attributes: [] },
       ],
       relations: [
         {
-          name: "workBackgrounds",
-          type: "EmployeeWorkBackground[]",
-          attribute: "",
-        },
-        {
-          name: "educationalBackgrounds",
-          type: "EmployeeEducationalBackground[]",
-          attribute: "",
-        },
-        {
-          name: "agreements",
-          type: "EmployeeAgreement[]",
-          attribute: "",
-        },
-        {
-          name: "sureties",
-          type: "EmployeeSurety[]",
+          name: "questions",
+          type: "Question[]",
           attribute: "",
         },
       ],
@@ -1171,6 +1193,29 @@ export const schema = {
       uniqueConstraints: [],
     },
     {
+      name: "Question",
+      fields: [
+        {
+          name: "id",
+          type: "String",
+          attributes: ["@id", "@default(uuid())"],
+        },
+        { name: "question", type: "string", attributes: [] },
+        { name: "mark", type: "number", attributes: [] },
+        { name: "interviewId", type: "string", attributes: [] },
+        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "updatedAt", type: "Date", attributes: [] },
+      ],
+      relations: [
+        {
+          name: "interview",
+          type: "Interview",
+          attributes: "",
+        },
+      ],
+      uniqueConstraints: [],
+    },
+    {
       name: "RoleMenu",
       fields: [
         {
@@ -1355,36 +1400,42 @@ export const schema = {
           attributes: ["@id", "@default(uuid())"],
         },
         { name: "title", type: "string", attributes: [] },
-        { name: "branchId", type: "string", attributes: [] },
-        { name: "departmentId", type: "string", attributes: [] },
         { name: "positionId", type: "string", attributes: [] },
         {
           name: "vacancyType",
           type: "'INTERNAL'|'EXTERNAL'",
+          attributes: ["@default(EXTERNAL)"],
+        },
+        {
+          name: "location",
+          type: "string",
           attributes: [],
         },
         {
           name: "employmentType",
           type: "'FULLTIME' | 'PARTTIME' | 'CONTRACT'",
-          attributes: [],
+          attributes: ["@default(FULLTIME)"],
         },
         {
           name: "status",
           type: "'ACTIVE' | 'DRAFT' | 'INACTIVE'",
-          attributes: [],
+          attributes: ["@default(ACTIVE)"],
         },
-        { name: "opening", type: "Date", attributes: [] },
-        { name: "deadline", type: "Date", attributes: [] },
-        { name: "secter", type: "string?", attributes: [] },
+        { name: "startDate", type: "Date", attributes: [] },
+        { name: "endDate", type: "Date", attributes: [] },
+        { name: "sector", type: "string?", attributes: [] },
         { name: "numberOfVacancies", type: "number", attributes: [] },
         { name: "salary", type: "number", attributes: [] },
+        { name: "minAge", type: "number", attributes: [] },
+        { name: "maxAge", type: "number", attributes: [] },
+
         { name: "description", type: "string?", attributes: [] },
         {
-          name: "experiance",
+          name: "experience",
           type: "'Fresh' | '1-2 Years' |'2-5 Years' | '5+ Years'",
-          attributes: [],
+          attributes: ["@default(Fresh)"],
         },
-        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "createdAt", type: "Date", attributes: ["@default(now)"] },
         { name: "updatedAt", type: "Date", attributes: [] },
       ],
       relations: [
@@ -1410,9 +1461,23 @@ export const schema = {
           attributes: [],
         },
         { name: "fullNameEnglish", type: "string", attributes: [] },
-        { name: "fullNameAmharic", type: "string", attributes: [] },
-        { name: "sex", type: "'MALE'|'FEMALE'", attributes: [] },
-        { name: "nationality", type: "'Ethiopian'|'OTHER'", attributes: [] },
+        { name: "fullNameAmharic", type: "string?", attributes: [] },
+        {
+          name: "gender",
+          type: "'MALE'|'FEMALE'",
+          attributes: ["@default(MALE)"],
+        },
+        {
+          name: "nationality",
+          type: "'Ethiopian'|'Non-Ethiopian'",
+          attributes: ["@default(Ethiopian)"],
+        },
+        {
+          name: "phone",
+          type: "string",
+          attributes: [],
+        },
+        { name: "attachment?", type: "string", attributes: [] },
         {
           name: "DateOfBirth",
           type: "Date",
@@ -1426,9 +1491,9 @@ export const schema = {
         {
           name: "status",
           type: "'PENDING' | 'INTERVIEWED' | 'HIRED' | 'REJECTED'",
-          attributes: [],
+          attributes: ["@default(PENDING)"],
         },
-        { name: "createdAt", type: "Date", attributes: [] },
+        { name: "createdAt", type: "Date", attributes: ["@default(now)"] },
         { name: "updatedAt", type: "Date", attributes: [] },
       ],
       relations: [],
